@@ -56,4 +56,6 @@ print_git_state
 
 bundle install --local
 
+for i in {1..40}; do cp spec/gocli/integration/nats-stress/stress_spec.rb  "spec/gocli/integration/nats-stress/stressed_${i}_spec.rb"; done
+
 bundle exec rake --trace spec:integration_gocli

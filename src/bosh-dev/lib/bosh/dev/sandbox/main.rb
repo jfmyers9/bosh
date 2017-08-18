@@ -205,6 +205,19 @@ module Bosh::Dev::Sandbox
       @logger.info("Reset took #{time} seconds")
     end
 
+    def dump_debug_logs
+      puts "DUMPING DEBUG LOGS==================="
+      #agent_tmp_path
+      if File.exist?(@nats_log_path)
+        puts "NATS DEBUG LOGS START------------"
+        puts File.read(@nats_log_path)
+        puts "NATS DEBUG LOGS END**************"
+      else
+        puts "BAD NO NATS LOGS TO DUMP"
+      end
+      puts "DUMPING DEBUG LOGS*******************"
+    end
+
     def reconfigure_health_monitor(erb_template=DEFAULT_HM_CONF_TEMPLATE_NAME)
       @health_monitor_process.stop
       write_in_sandbox(HM_CONFIG, load_config_template(File.join(SANDBOX_ASSETS_DIR, erb_template)))
@@ -388,6 +401,10 @@ module Bosh::Dev::Sandbox
     def do_reset
       @cpi.kill_agents
 
+      if File.exist?(@nats_log_path)
+        FileUtils.rm(@nats_log_path)
+      end
+
       @director_service.stop
 
       if @drop_database
@@ -406,6 +423,9 @@ module Bosh::Dev::Sandbox
 
       @uaa_service.restart_if_needed if @user_authentication == 'uaa'
       @config_server_service.restart(@with_config_server_trusted_certs) if @config_server_enabled
+
+      @nats_process.stop
+      @nats_process.start
 
       @director_service.start(director_config, @drop_database)
 
@@ -471,7 +491,7 @@ module Bosh::Dev::Sandbox
       conf = File.join(sandbox_root, NATS_CONFIG)
 
       @nats_process = Service.new(
-        %W[#{gnatsd_path} -c #{conf} -T -D ],
+        %W[#{gnatsd_path} -c #{conf} -T -DV ],
         {stdout: $stdout, stderr: $stderr},
         @logger
       )

@@ -63,8 +63,8 @@ namespace :fly do
   desc 'Fly integration gocli parallel specs'
   task :integration_gocli_parallel do
 
-    num_workers = 3
-    num_groups = 24
+    num_workers = 1
+    num_groups = 4
 
     groups = (1..num_groups).group_by { |i| i%num_workers }.values
                  .map { |group_values| group_values.join(',') }
