@@ -2,26 +2,26 @@
 name: director
 
 templates:
-  pre-start.erb: bin/pre-start
-  director_ctl.erb: bin/director_ctl
-  director.yml.erb.erb: config/director.yml.erb
+  bpm/director.yml: config/bpm/director.yml
+  bpm/nginx.yml: config/bpm/nginx.yml
+  bpm/scheduler.yml: config/bpm/scheduler.yml
+  bpm/sync_dns.yml: config/bpm/sync_dns.yml
   worker_ctl.erb: bin/worker_ctl
-  ps_utils.sh: bin/ps_utils.sh
+  bosh-director: bin/bosh-director
+  bosh-director-worker.erb: bin/bosh-director-worker
+  pre-start: bin/pre-start
+  director.yml.erb: config/director.yml
   drain: bin/drain
   sudoers: config/sudoers
   stemcell-copy.sh: bin/stemcell-copy
   restore-db: bin/restore-db
-  task_logrotate.sh: bin/task_logrotate
   task_logrotate.cron: config/task_logrotate.cron
   director.pem.erb: config/ssl/director.pem
   director.key.erb: config/ssl/director.key
   nginx.conf.erb: config/nginx.conf
-  nginx_ctl: bin/nginx_ctl
   mime.types: config/mime.types
-  scheduler_ctl.erb: bin/scheduler_ctl
   config_server_ca.cert.erb: config/config_server_ca.cert
   uaa_server_ca.cert.erb: config/uaa_server_ca.cert
-  sync_dns_ctl.erb: bin/sync_dns_ctl
   bbr_backup: bin/bbr/backup
   bbr_restore: bin/bbr/restore
 

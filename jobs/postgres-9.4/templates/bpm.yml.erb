@@ -1,0 +1,13 @@
+executable: /var/vcap/jobs/postgres-9.4/bin/postgres
+env:
+- HOST=<%= p("postgres.listen_address") %>
+- PORT=<%= p("postgres.port") %>
+- USER=<%= p("postgres.user") %>
+- PASSWORD=<%= p("postgres.password") %>
+- DBNAMES=<%= p("postgres.additional_databases").join(" ") + " " + p("postgres.database") %>
+- LD_LIBRARY_PATH=/var/vcap/packages/postgres-9.4/lib
+volumes:
+- /var/vcap/store/postgres
+- /var/vcap/data/postgres
+- /var/vcap/store/postgres-previous
+- /var/vcap/data/postgres-previous

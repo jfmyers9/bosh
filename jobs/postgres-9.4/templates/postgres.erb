@@ -1,0 +1,63 @@
+#!/bin/bash
+
+export DATA_DIR=/var/vcap/store/postgres-9.4
+
+set -e
+
+mkdir -p ${DATA_DIR}
+
+if [ -d ${DATA_DIR} -a -f ${DATA_DIR}/FLAG_POSTGRES_UPGRADE ]; then
+  echo "FAIL: DB upgrade stopped in the middle, manual intervention required, quitting..."
+  exit 1
+fi
+
+if [ ! -d ${DATA_DIR} -o ! -f ${DATA_DIR}/postgresql.conf ]; then
+  /var/vcap/packages/postgres-9.4/bin/initdb -E utf8 -D ${DATA_DIR}
+  echo "host all $USER 0.0.0.0/0 md5" >> ${DATA_DIR}/pg_hba.conf
+fi
+
+/var/vcap/jobs/postgres-9.4/bin/postgres_db_backup.sh
+
+mkdir -p ${DATA_DIR}/pg_log/
+
+cp /var/vcap/jobs/postgres-9.4/config/postgresql.conf ${DATA_DIR}
+
+/var/vcap/packages/postgres-9.4/bin/pg_ctl \
+  -o "-h $HOST -p $PORT" \
+  -w start \
+  -D ${DATA_DIR} \
+  -l "${DATA_DIR}/pg_log/startup.log"
+
+set +e
+
+IFS=" " read -ra ARR <<< $DBNAMES
+for DBNAME in "${ARR[@]}"; do
+  /var/vcap/packages/postgres-9.4/bin/createdb $DBNAME -p $PORT
+
+  /var/vcap/packages/postgres-9.4/bin/psql \
+    -d $DBNAME \
+    -p $PORT \
+    -U vcap \
+    -c "create role \"$USER\" NOSUPERUSER LOGIN INHERIT CREATEDB"
+
+  /var/vcap/packages/postgres-9.4/bin/psql \
+    -d $DBNAME \
+    -p $PORT \
+    -U vcap \
+    -c "alter role \"$USER\" with password '$PASSWORD'"
+
+done
+
+set -e
+
+/var/vcap/packages/postgres-9.4/bin/pg_ctl \
+  -o "-h $HOST -p $PORT" \
+  -w stop \
+  -m fast \
+  -D ${DATA_DIR} \
+  -l "${DATA_DIR}/pg_log/startup.log"
+
+/var/vcap/packages/postgres-9.4/bin/postgres \
+  -h $HOST \
+  -p $PORT \
+  -D ${DATA_DIR}

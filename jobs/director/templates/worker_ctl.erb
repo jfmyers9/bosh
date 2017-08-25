@@ -56,7 +56,8 @@ case $1 in
 
     echo $$ > $PIDFILE
 
-    COMPONENT=worker_$INDEX erb /var/vcap/jobs/director/config/director.yml.erb > /var/vcap/jobs/director/config/worker_$INDEX.yml
+    cp /var/vcap/jobs/director/config/director.yml /var/vcap/jobs/director/config/worker_$INDEX.yml
+    chown root:$RUNAS /var/vcap/jobs/director/config/worker_$INDEX.yml
 
     exec chpst -u $RUNAS:$RUNAS \
       /var/vcap/packages/director/bin/bosh-director-worker \

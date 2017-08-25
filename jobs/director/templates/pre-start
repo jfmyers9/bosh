@@ -1,0 +1,29 @@
+#!/bin/bash
+
+set -e
+
+CONFIG_DIR=/var/vcap/jobs/director/config
+
+chmod -R 0640 $CONFIG_DIR
+find $CONFIG_DIR -type d | xargs -n1 chmod 0750
+
+chown -R root:vcap $CONFIG_DIR
+
+(crontab -l | sed /task_logrotate/d; cat /var/vcap/jobs/director/config/task_logrotate.cron) | sed /^$/d | crontab
+
+# This hackery is needed until we have a way to manage things outside
+# the /var/vcap directory. Requires stemcell 0.5.4 or later
+cp /var/vcap/jobs/director/config/sudoers /etc/sudoers.d/director
+chmod 440 /etc/sudoers.d/director
+
+# if we encounter a problem after adding the sudoers file, back it out
+# and abort
+visudo -c
+if [ $? -ne 0 ]; then
+	rm /etc/sudoers.d/director
+	echo "ERROR: could not configure sudoers"
+	exit 1
+fi
+
+# Hack to work around NGINX upload module disrespecting proxy_temp_path
+mkdir -p /var/vcap/packages/nginx/proxy_temp

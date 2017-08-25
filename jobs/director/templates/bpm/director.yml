@@ -1,0 +1,24 @@
+executable: /var/vcap/jobs/director/bin/bosh-director
+
+additional_jobs:
+- warden_cpi
+
+env:
+- "C_INCLUDE_PATH=/var/vcap/packages/sqlite/include:/var/vcap/packages/libpq/include"
+- "LD_LIBRARY_PATH=/var/vcap/packages/libpq/lib:/var/vcap/packages/mysql/lib/mysql"
+- "LIBRARY_PATH=/var/vcap/packages/sqlite/lib:/var/vcap/packages/libpq/lib:/var/vcap/packages/mysqlclient/lib"
+- "PATH=/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin:/var/vcap/packages/ruby/bin:/var/vcap/jobs/director/bin:/var/vcap/packages/postgres-9.4/bin:/var/vcap/packages/postgres/bin:/var/vcap/packages/mysql/bin"
+- BUNDLE_GEMFILE=/var/vcap/packages/director/Gemfile
+- GEM_HOME=/var/vcap/packages/director/gem_home/ruby/2.3.0
+<% if_p('env.http_proxy') do |http_proxy| %>
+- HTTP_PROXY=<%= http_proxy %>
+- http_proxy=<%= http_proxy %>
+<% end %>
+<% if_p('env.https_proxy') do |https_proxy| %>
+- HTTPS_PROXY=<%= https_proxy %>
+- https_proxy=<%= https_proxy %>
+<% end %>
+<% if_p('env.no_proxy') do |no_proxy| %>
+- NO_PROXY=<%= no_proxy %>
+- no_proxy=<%= no_proxy %>
+<% end %>

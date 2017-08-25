@@ -98,7 +98,7 @@ describe 'director.yml.erb.erb' do
 
       it 'should configure the paths' do
           expect(parsed_yaml['blobstore']['provider']).to eq('davcli')
-          expect(parsed_yaml['blobstore']['options']['davcli_config_path']).to eq('/var/vcap/data/tmp/director')
+          expect(parsed_yaml['blobstore']['options']['davcli_config_path']).to eq('/var/vcap/data/director/tmp')
           expect(parsed_yaml['blobstore']['options']['davcli_path']).to eq('/var/vcap/packages/davcli/bin/davcli')
       end
     end
@@ -111,7 +111,7 @@ describe 'director.yml.erb.erb' do
 
       it 'should configure the paths' do
         expect(parsed_yaml['blobstore']['provider']).to eq('s3cli')
-        expect(parsed_yaml['blobstore']['options']['s3cli_config_path']).to eq('/var/vcap/data/tmp/director')
+        expect(parsed_yaml['blobstore']['options']['s3cli_config_path']).to eq('/var/vcap/data/director/tmp')
         expect(parsed_yaml['blobstore']['options']['s3cli_path']).to eq('/var/vcap/packages/s3cli/bin/s3cli')
       end
     end
@@ -199,7 +199,7 @@ describe 'director.yml.erb.erb' do
 
         it 'should configure the paths' do
           expect(parsed_yaml['backup_destination']['provider']).to eq('s3cli')
-          expect(parsed_yaml['backup_destination']['options']['s3cli_config_path']).to eq('/var/vcap/data/tmp/director')
+          expect(parsed_yaml['backup_destination']['options']['s3cli_config_path']).to eq('/var/vcap/data/director/tmp')
           expect(parsed_yaml['backup_destination']['options']['s3cli_path']).to eq('/var/vcap/packages/s3cli/bin/s3cli')
         end
       end
@@ -214,7 +214,7 @@ describe 'director.yml.erb.erb' do
         it 'should configure the paths' do
           expect(parsed_yaml['backup_destination']['provider']).to eq('davcli')
 
-          expect(parsed_yaml['backup_destination']['options']['davcli_config_path']).to eq('/var/vcap/data/tmp/director')
+          expect(parsed_yaml['backup_destination']['options']['davcli_config_path']).to eq('/var/vcap/data/director/tmp')
           expect(parsed_yaml['backup_destination']['options']['davcli_path']).to eq('/var/vcap/packages/davcli/bin/davcli')
         end
       end

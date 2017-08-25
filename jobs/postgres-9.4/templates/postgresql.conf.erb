@@ -1,5 +1,5 @@
 data_directory = '/var/vcap/store/postgres-9.4'
-external_pid_file = '/var/vcap/sys/run/postgres-9.4/postgres.pid'
+external_pid_file = '/var/vcap/data/postgres-9.4/postgres.pid'
 
 listen_addresses = '<%= p('postgres.listen_address') %>'
 port = <%= p('postgres.port') %>

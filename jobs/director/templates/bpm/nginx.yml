@@ -1,0 +1,9 @@
+---
+executable: /var/vcap/packages/nginx/sbin/nginx
+
+args:
+- -c
+- /var/vcap/jobs/director/config/nginx.conf
+
+env:
+- SSL_DIR=/var/vcap/jobs/director/config/ssl

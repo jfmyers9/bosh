@@ -46,14 +46,12 @@ nats/vendor/cache/yajl-ruby-1.1.0.gem:
   size: 559616
   object_id: 9d949fd3-d8d9-45f0-92ab-4a8f5a9abc56
   sha: b22512fc1bd68f495f4538d3e29735da494bea04
-nginx/headers-more-nginx-module-0.30.tar.gz:
-  size: 27793
-  object_id: ee5b4828-67f9-42f7-a0fb-23b4d4c9805f
-  sha: a188a399f3e365a0831585a9d7aa0e6ed1a75f0d
-nginx/nginx-1.12.1.tar.gz:
-  size: 981093
-  object_id: 740ca33e-2b75-4b22-5713-e5791471ec49
-  sha: 71000022267589f50e83b0d6743923c1b7e64238
+nginx/headers-more-nginx-module-0.32.tar.gz:
+  size: 28033
+  sha: aadb7f0b6c5b5b9cae2af72984e03dc2fbf3fecb
+nginx/nginx-1.13.4.tar.gz:
+  size: 988415
+  sha: ee4496ef27fac66cf90aa60c4132215e552a340d
 nginx/nginx-upload-module-2.2.tar.gz:
   size: 28505
   object_id: 118f94b0-2738-4019-9aa2-1832b948a5b1

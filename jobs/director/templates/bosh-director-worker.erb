@@ -1,0 +1,15 @@
+#!/bin/bash
+
+set -e
+
+# $BPM_ID will be in the format `director.worker_$INDEX`
+INDEX=$(echo $BPM_ID | cut -d'_' -f2)
+<% if (p('director.enable_dedicated_status_worker')) && (p('director.workers') > 1) %>
+if [ $INDEX -eq 1 ]; then
+  export QUEUE="urgent"
+fi
+<% end %>
+
+exec /var/vcap/packages/director/bin/bosh-director-worker \
+  -c /var/vcap/jobs/director/config/director.yml \
+  -i $INDEX

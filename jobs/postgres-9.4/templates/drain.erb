@@ -1,0 +1,11 @@
+#!/bin/bash
+
+PID=$(/var/vcap/jobs/bpm/bin/bpm pid postgres-9.4)
+
+DATA_DIR=/var/vcap/store/postgres-9.4
+OLD_DATA_DIR=/var/vcap/store/postgres
+
+su - vcap -c "[ -f ${DATA_DIR}/postmaster.pid ] && /var/vcap/packages/postgres-9.4/bin/pg_ctl stop -m fast -w -D ${DATA_DIR}
+[ -f /var/vcap/data/postgres/postmaster.pid ] && /var/vcap/packages/postgres/bin/pg_ctl stop -m fast -w -D ${OLD_DATA_DIR}"
+
+while [ -e /proc/$PID ]; do sleep 0.1; done
